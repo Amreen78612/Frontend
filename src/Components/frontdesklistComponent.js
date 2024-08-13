@@ -360,10 +360,7 @@ function FrontListUse() {
                                                                 <span><i class="bx bx-export me-1"></i>Export</span>
                                                             </button>
 
-                                                            <button class="btn btn-secondary add-new btn-primary d-flex cus_Add" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
-
-                                                                <span><i class="bx bx-plus me-0 me-sm-1"></i>Lead</span>
-                                                            </button>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -448,8 +445,8 @@ function FrontListUse() {
                                                                 </div>
                                                             </td>
                                                             <td><div classNmae="d-inline-block text-nowrap">
-                                                                <Link to={`/addsaleteam/${lead.id}`} className="pr--5" >
-                                                                    <button class="btn btn-sm btn-icon edit_sales" data-bs-target="#editUser" data-bs-toggle="modal">
+                                                                <Link to={`/update/${lead.id}`} className="pr--5" >
+                                                                    <button class="btn btn-sm btn-icon edit_sales">
                                                                         <i class="bx bx-edit"></i>
 
                                                                     </button>

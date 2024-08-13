@@ -92,13 +92,13 @@ function DashBoardMenu(onLogout) {
                     </li>
                 )}
                 {/* Render  menu Courese */}
-                {table.Role && table.Role.Name === 'Super Admin' && (
+                {/*    {table.Role && table.Role.Name === 'Super Admin' && (
                     <li className={`menu-item ${activeService === 'Super Admin' ? 'active' : ''} show_project_web`}>
                         <a href="#" onClick={() => toggleDropdown('dropdowncourese')} className="menu-link  menu-toggle" id="dropdownMenuButton">
                             <i className='menu-icon bx bxl-discourse'></i>
                             <div data-i18n="Layouts">Class / Course List</div>
                         </a>
-                        {/* Step 4: Conditionally render dropdown based on state */}
+                     
                         {activeService === 'dropdowncourese' && (
                             <ul className="" aria-labelledby="dropdownMenuButton">
                                 <li className="menu-item">
@@ -111,7 +111,7 @@ function DashBoardMenu(onLogout) {
                             </ul>
                         )}
                     </li>
-                )}
+                )} */}
                 {/* Render Lead menu for Sale Department */}
                 {['Super Admin', 'Admin', 'Counselor Department'].includes(table.Role && table.Role.Name) && (
                     <li className={`menu-item ${activeService === table.Role && table.Role.Name ? 'active' : ''} show_project_web`}>

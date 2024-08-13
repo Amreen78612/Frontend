@@ -1142,8 +1142,6 @@ function SaleTeamUse() {
                                                         <div className="col-md-6">
                                                             <form className="add-new-user" id="addNewUserForm" onSubmit={handleSubmit} noValidate>
                                                                 <div className='right_form-fields'>
-
-
                                                                     <div className="mb-1 fv-plugins-icon-container lead-form">
                                                                         <input
                                                                             type="text"
@@ -1246,9 +1244,6 @@ function SaleTeamUse() {
                                                             <div className="col-md-12">
                                                                 <form className="add-new-user" id="addNewUserForm" onSubmit={handleSubmit} noValidate>
                                                                     <div className='right_form-fields'>
-
-
-
                                                                         <div className="mb-1 fv-plugins-icon-container lead-form">
                                                                             <input
                                                                                 type="text"

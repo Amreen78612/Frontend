@@ -138,7 +138,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              loggedIn && (datatoken?.Role?.Name === 'Student' || datatoken?.Role?.Name === 'Instructor'||datatoken?.Role?.Name ==='Guest/Viewer') ? (
+              loggedIn && (datatoken?.Role?.Name === 'Student' || datatoken?.Role?.Name === 'Instructor' || datatoken?.Role?.Name === 'Guest/Viewer') ? (
                 <InstructorDashboard userData={datatoken} onLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" />
@@ -149,7 +149,7 @@ function App() {
           <Route
             path="/dashboard/admin"
             element={
-              loggedIn && ['Super Admin', 'Admin', 'Telecaller Department', 'Administrator','Sale Department', 'Telecaller Team', 'Front Desk', 'Counselor Department', 'Account Department'].includes(datatoken?.Role?.Name) ? (
+              loggedIn && ['Super Admin', 'Admin', 'Telecaller Department', 'Administrator', 'Sale Department', 'Telecaller Team', 'Front Desk', 'Counselor Department', 'Account Department'].includes(datatoken?.Role?.Name) ? (
                 <Dashboards userData={datatoken} onLogout={handleLogout} />
               ) : (
                 <Navigate to="/login" />
@@ -158,7 +158,7 @@ function App() {
           />
 
           <Route path="*" element={<Navigate to="/login" />} />
-         
+
           <Route
             path="/complete-profile/:usersId"
             element={<CompleteProfile />}
@@ -189,6 +189,7 @@ function App() {
             path="/addsaleteam/:saleteamId"
             element={loggedIn === true ? (<AddSaleTeamRouters onLogout={handleLogout} />) : (<Navigate to="/login" />)}
           />
+          <Route path='/update/:frontdeskId' element={loggedIn === true ? (<EnquiryUpdate onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
           <Route
             path="/telecaller"
             element={loggedIn === true ? (<TeleCallerRouters onLogout={handleLogout} />) : (<Navigate to="/login" />)}
@@ -342,7 +343,7 @@ function App() {
             path="/coursedetails/:coursesId"
             element={<CoursedetailRouter />}
           />
-         {/*  <Route
+          {/*  <Route
             path="/createcourse/:coursesId"
             element={loggedIn === true ? (<InstructorUpdateCourse onLogout={handleLogout} />) : <Login onLogin={handleLogin} />} />
  */}
@@ -391,7 +392,7 @@ function App() {
             element={<CalenderRouter />} />
           <Route
             path="/instructor/assignment"
-            element={loggedIn===true?(<AssignmentRouter onLogout={handleLogout}/>):(<Login onLogin={handleLogin}/>)} />
+            element={loggedIn === true ? (<AssignmentRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
 
           <Route
             path="/announcement"
@@ -407,24 +408,24 @@ function App() {
           <Route
             path="/announcementdetails"
             element={<AnnouncementdetailRouter />} />
-             <Route
+          <Route
             path="/mangedlead"
-            element={<SteperformPage/>} />
-                <Route
+            element={<SteperformPage />} />
+          <Route
             path="/mangedlead/:frontdeskId"
-            element={<SteperformPage/>} />
+            element={<SteperformPage />} />
           <Route
             path="/quizetresult/:studentquizeId"
-            element={loggedIn === true ? (<QuizeResultRouter  onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/attemptquestion' element={loggedIn === true ? (<AttempquestionRouter  onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/studentmateriales/:coursesId' element={loggedIn === true ? (<StudentMaterialesRouter  onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/quizeupdate/:quizzeId'   element={loggedIn === true ? (<QuizeUpdateRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/updatequestion/:quizzeId/:questionId'  element={loggedIn === true ? (<UpdatequestionRouter  onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/updatequestion/:questionId'  element={loggedIn === true ? (<UpdatequestionsRouter  onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/updatesubject/:topicId'   element={loggedIn === true ? (<UpdateSubjectRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/updatemodel/:lessionId'   element={loggedIn === true ? (<UpdateModelRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/updatecontent/:videoId'   element={loggedIn === true ? (<UpdateContentRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
-          <Route path='/update'   element={loggedIn === true ? (<EnquiryUpdate onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+            element={loggedIn === true ? (<QuizeResultRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/attemptquestion' element={loggedIn === true ? (<AttempquestionRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/studentmateriales/:coursesId' element={loggedIn === true ? (<StudentMaterialesRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/quizeupdate/:quizzeId' element={loggedIn === true ? (<QuizeUpdateRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/updatequestion/:quizzeId/:questionId' element={loggedIn === true ? (<UpdatequestionRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/updatequestion/:questionId' element={loggedIn === true ? (<UpdatequestionsRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/updatesubject/:topicId' element={loggedIn === true ? (<UpdateSubjectRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/updatemodel/:lessionId' element={loggedIn === true ? (<UpdateModelRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+          <Route path='/updatecontent/:videoId' element={loggedIn === true ? (<UpdateContentRouter onLogout={handleLogout} />) : (<Login onLogin={handleLogin} />)} />
+
         </Routes>
       </BrowserRouter>
     </CartProvider>

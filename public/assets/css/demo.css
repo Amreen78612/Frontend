@@ -5,7 +5,7 @@ span.hours {
   font-weight: 700;
 }
 svg.infowht {
-  vertical-align: baseline;
+  vertical-align: text-bottom;
   font-size: 16px;
 }
 .infodetails i {
