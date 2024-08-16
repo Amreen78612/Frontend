@@ -357,7 +357,7 @@ function FrontListUse() {
                                                             <button class="btn buttons-collection dropdown-toggle btn-label-secondary mx-3 d-flex"
                                                                 tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog"
                                                                 aria-expanded="false">
-                                                                <span><i class="bx bx-export me-1"></i>Export</span>
+                                                                <span><i class="bx bx-export me-1"></i>Import</span>
                                                             </button>
 
                                                             

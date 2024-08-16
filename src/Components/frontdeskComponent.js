@@ -42,15 +42,10 @@ function FrontUse() {
     const [formVisible, setFormVisible] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const navigate = useNavigate();
-
-    const [searchTerm, setSearchTerm] = useState('');
     const [saleTeamData, setSaleTeamData] = useState([]);
-    const [TelecallerCheckbox, setTelecallerCheckbox] = useState(false);
     const [coursesTable, setCoursesTable] = useState([]);
     const [countryTable, setCountryTable] = useState([]);
-    const [lead_status, setleadstatus] = useState('');
-    const [username, setusername] = useState('');
+
 
     useEffect(() => {
         const indiaOption = countryTable.find(option => option.name === "India");
@@ -566,7 +561,7 @@ function FrontUse() {
                                                 <div className="flex-grow-0 ">
                                                     <div className='col-12 col-xl-12 col-lg-12 col-md-12'>
                                                         <div className='header_choos_details'>
-                                                            <form onSubmit={handleSubmit} style={{ backgroundColor: '#fff', paddingLeft: '20px',paddingRight: '20px' }}>
+                                                            <form onSubmit={handleSubmit} style={{ backgroundColor: '#fff', paddingLeft: '20px', paddingRight: '20px' }}>
                                                                 <div className="row">
                                                                     <div className='card' style={{ boxShadow: " 0 2px 6px 0 rgb(255 255 255 / 0%)", backgroundColor: '#rgb(255 255 255 / 16%)', border: '1px solid rgb(231 181 174)', padding: '20px', borderRadius: '8px' }}>
                                                                         <div className="row">
@@ -706,12 +701,12 @@ function FrontUse() {
                                                                                     className="form-control"
                                                                                 >
                                                                                     <option value="">Select Status</option>
-                                                                                    <option value="1st Call">1st Call</option>
-                                                                                    <option value="2nd Call">2nd Call</option>
-                                                                                    <option value="3rd Call">3rd Call</option>
-                                                                                    <option value="4th Call">4th Call</option>
-                                                                                    <option value="Not Responding (N/R)">Not Responding (N/R)</option>
-                                                                                    <option value="Other">Other</option>
+                                                                                    <option value='1st Call'>1st Call</option>
+                                                                                    <option value='2nd Call'>2nd Call</option>
+                                                                                    <option value='3rd Call'>3rd Call</option>
+                                                                                    <option value='4rd Call'>4rd Call</option>
+                                                                                    <option value='Not Responding (N/R)'>Not Responding (N/R)</option>
+                                                                                    <option value='Other'>Other</option>
                                                                                 </select>
                                                                             </div>
 

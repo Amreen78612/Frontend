@@ -7,9 +7,11 @@ import Navbar from './navComponemt';
 import DashBoardMenus from './dashboardsMenuComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 const { REACT_APP_API_ENDPOINT } = process.env;
+
 const EnquiryUpdate = ({ handleNext }) => {
     const [userData, setUserData] = useState({});
     const { frontdeskId } = useParams();
+    const [formStepsNum, setFormStepsNum] = useState(1);
     const fetchData1 = async (frontdeskId) => {
         try {
             if (!frontdeskId) {
@@ -36,6 +38,10 @@ const EnquiryUpdate = ({ handleNext }) => {
     useEffect(() => {
         fetchData1(frontdeskId);
     }, [frontdeskId]);
+    const getProgressWidth = () => {
+        const progressWidths = ['0%', '0%', '25%', '48%', '73%', '96%'];
+        return progressWidths[formStepsNum] || '0%';
+    };
     const prevButton = <button>Previous</button>;
     const nextButton = <button>Next</button>;
     return (
@@ -70,7 +76,7 @@ const EnquiryUpdate = ({ handleNext }) => {
                                             <div class="d-flex align-items-end row">
                                                 <div class="col-sm-7">
                                                     <div class="card-body">
-                                                        <h5 class="card-title text-primary cus_icon"><span>{userData.name&& userData.name.charAt(0)&&userData.name.charAt(0).toLocaleUpperCase()}</span>{userData.name && userData.name.charAt(0).toUpperCase() + userData.name.slice(1).toLowerCase()}
+                                                        <h5 class="card-title text-primary cus_icon"><span>{userData.name && userData.name.charAt(0) && userData.name.charAt(0).toLocaleUpperCase()}</span>{userData.name && userData.name.charAt(0).toUpperCase() + userData.name.slice(1).toLowerCase()}
                                                         </h5>
                                                         <div className='d-flex'>
                                                             <div className='infotext'>Email:</div>
@@ -82,7 +88,7 @@ const EnquiryUpdate = ({ handleNext }) => {
                                                             <div className='infodetails'>
                                                                 <a href={`https://web.whatsapp.com/send?phone=+919893688878&text=Hello`} target="_blank" rel="noopener noreferrer">
 
-                                                                <FaWhatsapp className="infowht" color="#25D366" />  <span>{userData.phoneNumber}</span> <span className="checkmark">✔</span>
+                                                                    <FaWhatsapp className="infowht" color="#25D366" />  <span>{userData.phoneNumber}</span> <span className="checkmark">✔</span>
                                                                 </a>
 
                                                             </div>
@@ -192,10 +198,74 @@ const EnquiryUpdate = ({ handleNext }) => {
                             </div>
                             <div className='row'>
                                 <div className='col-lg-12'>
-                                  {/* <MultiStep activeStep={0} prevButton={prevButton} nextButton={nextButton}>
-                                        <StepOne title='Step 1' />
-                                        <StepTwo title='Step 2' /> 
-                                    </MultiStep>  */}
+                                    <div className="create-te-course-area-start ptb--25 bg-white">
+                                        <div className="container">
+                                            <div className="row  g-5">
+                                                <div className="col-12 col-md-12 col-xl-12 col-lg-12">
+                                                    {/* Progress Bar */}
+                                                    <div className="progress-container">
+                                                        <div className={`progress ${formStepsNum > 1 ? 'active' : ''}`} style={{ width: getProgressWidth() }}></div>
+                                                        <div className={`circle ${formStepsNum >= 2 ? 'active' : ''} ${formStepsNum > 2 ? 'checkmark-visible' : ''}`} data-title="Personal">
+                                                            {formStepsNum > 2 ? <span className="checkmark">✔</span> : '2'}
+                                                        </div>
+                                                        <div className={`circle ${formStepsNum >= 3 ? 'active' : ''} ${formStepsNum > 3 ? 'checkmark-visible' : ''}`} data-title="Contact">
+                                                            {formStepsNum > 3 ? <span className="checkmark">✔</span> : '3'}
+                                                        </div>
+                                                        <div className={`circle ${formStepsNum >= 4 ? 'active' : ''} ${formStepsNum > 4 ? 'checkmark-visible' : ''}`} data-title="Experiences">
+                                                            {formStepsNum > 4 ? <span className="checkmark">✔</span> : '4'}
+                                                        </div>
+                                                        <div className={`circle ${formStepsNum >= 5 ? 'active' : ''} ${formStepsNum > 5 ? 'checkmark-visible' : ''}`} data-title="FiveStep">
+                                                            {formStepsNum > 5 ? <span className="checkmark">✔</span> : '5'}
+                                                        </div>
+                                                        <div className={`circle ${formStepsNum >= 1 ? 'active' : ''} ${formStepsNum > 1 ? 'checkmark-visible' : ''}`} data-title="Links">
+                                                            {formStepsNum > 1 ? <span className="checkmark">✔</span> : '1'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-12 col-md-12 col-xl-12 col-lg-12 ">
+
+                                                    {/* Form Steps  1*/}
+                                                    {formStepsNum === 1 && (
+                                                        <div className="step-content mt-4 mb-4">
+                                                            <div className='card'>
+                                                                <h3 className="card-title mt-4 text-nowrap mb-1">Step 1: Personal</h3>
+                                                                <h2 className="step-title mb-4">Step 1: Personal Details</h2>
+                                                            </div>
+
+                                                        </div>
+                                                    )}
+
+                                                    {/* Form Steps  2*/}
+                                                    {formStepsNum === 2 && (
+                                                        <div className="step-content">
+                                                            <h2 className='step-title'>Step 2: Contact Details </h2>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Form Steps  3*/}
+                                                    {formStepsNum === 3 && (
+                                                        <div className="step-content">
+                                                            <h2 className='step-title'>Step 3: Experiences Details </h2>
+                                                        </div>
+                                                    )}
+                                                    {/* Form Steps  4*/}
+                                                    {formStepsNum === 4 && (
+                                                        <div className="step-content">
+                                                            <h2 className='step-title'>Step 4: Five Step Details </h2>
+                                                        </div>
+                                                    )}
+                                                    {/* Form Steps  5*/}
+                                                    {formStepsNum === 5 && (
+                                                        <div className="step-content">
+                                                            <h2 className='step-title'>Step 5: Link Details </h2>
+                                                        </div>
+                                                    )}
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

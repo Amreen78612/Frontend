@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Footer from './footerComponent';
 import Navbar from './navComponemt';
@@ -77,6 +77,7 @@ function SaleTeamUse() {
         };
     }
 
+    // Adjust debounce delay as needed
     const debouncedUpdateCheckboxState = debounce(async (inputId, isChecked, label, type) => {
         try {
             const token = localStorage.getItem('token');
@@ -99,8 +100,6 @@ function SaleTeamUse() {
             console.error('Error updating checkbox state', error);
         }
     }, 300);
-    // Adjust debounce delay as needed
-
 
     // Function to handle checkbox change
     const handleCheckboxChange = (e, id, type, label) => {
@@ -123,13 +122,7 @@ function SaleTeamUse() {
 
             return newCheckedInputs;
         });
-    };
-
-
-
-    // saleteamId set data
-
-
+    }
 
     // saleteamId set data
     useEffect(() => {
@@ -446,24 +439,27 @@ function SaleTeamUse() {
     }
 
     // Handle drag and drop end event
-    const handleDragEnd = async (event) => {
+    const handleDragEnd = (event) => {
         const { active, over } = event;
 
-        if (active.id !== over.id) {
+        if (active && over && active.id !== over.id) {
             setAllInputFields((items) => {
-                const oldIndex = items.findIndex(item => item.id === active.id);
-                const newIndex = items.findIndex(item => item.id === over.id);
-                const newItems = arrayMove(items, oldIndex, newIndex);
-                return newItems;
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+                return arrayMove(items, oldIndex, newIndex);
             });
+
+            // Set the selected task to the item that was just dragged
+            const selectedTask = allInputFields.find(task => task.id === active.id);
+            setSelectedTask(selectedTask);
         }
     };
+
+    // Handle Change
     const handleChange = (e, id) => {
         const { value } = e.target;
         setFormData((prev) => ({ ...prev, [id]: value }));
     };
-
-
 
     // Mapping of types to rendering logic
     const inputTypes = {
@@ -595,16 +591,23 @@ function SaleTeamUse() {
                 className="select2 form-select enquery-form"
                 name={id}
                 onChange={(e) => handleChange(e, id)}
-                value={formData[id] || ''}
+                value={formData[id]}
             >
                 <option value="">Select City</option>
-                {city.map(option => (
-                    <option key={option.id} value={option.id}>
-                        {option.name}
-                    </option>
-                ))}
+                {Array.isArray(city) && city.length > 0 ? (
+                    city.map(option => (
+                        option && option.id && option.name ? (
+                            <option key={option.id} value={option.id}>
+                                {option.name}
+                            </option>
+                        ) : null
+                    ))
+                ) : (
+                    <option value="" disabled>No Cities Available</option>
+                )}
             </select>
         ),
+
         courseId: ({ id }) => (
             <select
                 id={id}
@@ -614,11 +617,18 @@ function SaleTeamUse() {
                 value={formData[id] || ''}
             >
                 <option value="">Select Course/Class</option>
-                {courses.map(option => (
-                    <option key={option.id} value={option.id}>
-                        {option.name}
-                    </option>
-                ))}
+                {Array.isArray(courses) && courses.length > 0 ? (
+                    courses.map(option => (
+                        option && option.id && option.name ? (
+                            <option key={option.id} value={option.id}>
+                                {option.name}
+                            </option>
+                        ) : null
+                    ))
+                ) : (
+                    <option value="" disabled>No Class Available</option>
+                )}
+
             </select>
         ),
         batchId: ({ id }) => (
@@ -704,7 +714,6 @@ function SaleTeamUse() {
 
     // Render input function
     const renderInput = (type, id) => {
-
         const InputComponent = inputTypes[type];
         return InputComponent ? <InputComponent id={id} /> : null;
     };
@@ -763,28 +772,61 @@ function SaleTeamUse() {
             );
         }
     };
+
+
+
+    const fileInputRef = useRef(null);
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+
+        if (!file) {
+            alert('No file selected.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (token) {
+                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/importlead`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    }
+                });
+                alert('Lead Imported Successfully');
+                window.location.href = "/addsaleteam";
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Failed to import leads.');
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
+
+
     return (
         <>
-            {/*     <!-- Layout wrapper --> */}
+            {/*<!-- Layout wrapper --> */}
             <div class="layout-wrapper layout-content-navbar">
                 <div class="layout-container">
-                    {/*      <!-- Menu --> */}
+                    {/*<!-- Menu --> */}
                     <DashBoardMenus />
-                    {/*         <!-- / Menu --> */}
+                    {/*<!-- / Menu --> */}
 
-                    {/*     <!-- Layout container --> */}
+                    {/*<!-- Layout container --> */}
                     <div class="layout-page">
 
                         <Navbar />
 
                         <div class="content-wrapper">
-
-
-
                             <div class="container-xxl flex-grow-1 container-p-y">
-
-
-
                                 <div class="row g-4 mb-4">
                                     <div class="col-sm-6 col-xl-3">
                                         <div class="card">
@@ -838,7 +880,7 @@ function SaleTeamUse() {
                                                             <h4 class="mb-0 me-2">19,860</h4>
                                                             <small class="text-danger">(-14%)</small>
                                                         </div>
-                                                        <p class="mb-0">Last week analytics</p>
+                                                        <p class="mb-0">Last Week Analytics</p>
                                                     </div>
                                                     <div class="avatar">
                                                         <span class="avatar-initial rounded bg-label-success">
@@ -859,7 +901,7 @@ function SaleTeamUse() {
                                                             <h4 class="mb-0 me-2">237</h4>
                                                             <small class="text-success">(+42%)</small>
                                                         </div>
-                                                        <p class="mb-0">Last week analytics</p>
+                                                        <p class="mb-0">Last Week Analytics</p>
                                                     </div>
                                                     <div class="avatar">
                                                         <span class="avatar-initial rounded bg-label-warning">
@@ -910,12 +952,22 @@ function SaleTeamUse() {
                                                             <input type="search" class="form-control" placeholder="Search.." aria-controls="DataTables_Table_0" /></label>
                                                         </div>
                                                         <div class="btn-group d-flex flex-row">
-                                                            <button class="btn buttons-collection dropdown-toggle btn-label-secondary mx-3 d-flex"
-                                                                tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog"
+                                                            <input
+                                                                type="file"
+                                                                ref={fileInputRef}
+                                                                style={{ display: 'none' }} // Hide the input field
+                                                                onChange={handleFileChange}
+                                                            />
+                                                            <button
+                                                                onClick={triggerFileInput}
+                                                                className="btn buttons-collection dropdown-toggle btn-label-secondary mx-3 d-flex"
+                                                                tabindex="0"
+                                                                aria-controls="DataTables_Table_0"
+                                                                type="button"
+                                                                aria-haspopup="dialog"
                                                                 aria-expanded="false">
-                                                                <span><i class="bx bx-export me-1"></i>Export</span>
+                                                                <span><i className="bx bx-export me-1"></i>Import</span>
                                                             </button>
-
                                                             <button class="btn btn-secondary add-new btn-primary d-flex cus_Add" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
 
                                                                 <span><i class="bx bx-plus me-0 me-sm-1"></i>Lead</span>
@@ -1141,8 +1193,8 @@ function SaleTeamUse() {
                                                         </div>
                                                         <div className="col-md-6">
                                                             <form className="add-new-user" id="addNewUserForm" onSubmit={handleSubmit} noValidate>
-                                                                <div className='right_form-fields'>
-                                                                    <div className="mb-1 fv-plugins-icon-container lead-form">
+                                                                <div className='right_form-fields' >
+                                                                    <div className="mb-1 mt-4 fv-plugins-icon-container lead-form">
                                                                         <input
                                                                             type="text"
                                                                             className="form-control enquery-form"
@@ -1207,23 +1259,34 @@ function SaleTeamUse() {
                                                                         />
                                                                         <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                                                     </div>
-                                                                    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                                                                        <SortableContext items={allInputFieldsData.map(item => item.id)} strategy={verticalListSortingStrategy}>
+                                                                    <DndContext
+                                                                        collisionDetection={closestCenter}
+                                                                        onDragEnd={handleDragEnd}
+                                                                    >
+                                                                        <SortableContext
+                                                                            items={allInputFieldsData.map((item) => item.id)}
+                                                                            strategy={verticalListSortingStrategy}
+                                                                        >
                                                                             <ul className="list widget_dragable cus_leftsfields" id="dragItemBox">
                                                                                 {allInputFieldsData.map((item) => (
-                                                                                    item.component && (
-                                                                                        <Draggable key={item.id} id={item.id} component={<li className="draggable_column_item">{item.component}</li>} />
-                                                                                    )
+                                                                                    <Draggable key={item.id} id={item.id} component={<li className="draggable_column_item">
+                                                                                        {item.component}
+                                                                                    </li>} />
+
+
                                                                                 ))}
                                                                             </ul>
                                                                         </SortableContext>
                                                                     </DndContext>
 
+
+
                                                                 </div>
-                                                                <div className="mb-3 fv-plugins-icon-container d-flex mr--45">
+                                                                <div className="mb-3  mt-5 fv-plugins-icon-container d-flex mr--45">
                                                                     <button type="submit" className="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
                                                                     <button type="reset" className="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
                                                                 </div>
+
                                                             </form>
                                                         </div>
                                                     </div>
@@ -1340,8 +1403,8 @@ function SaleTeamUse() {
                                             </div>
                                         </div>)}
                                 </div >
-                                {/*  <!-- Modal -->
-                            <!-- Edit User Modal --> */}
+
+                                {/*  <!-- Modal -->   <!-- Edit User Modal --> */}
                                 <div class="modal fade modal_addsalteam" id="editUser" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-simple modal-edit-user">
                                         <div class="modal-content">
@@ -1399,13 +1462,13 @@ function SaleTeamUse() {
                                                                 defaultValue={workingStatus} class="form-control" placeholder="student" />
                                                         </div>
                                                         <div class="col-12 col-md-6">
-                                                            <label class="form-label" for="modalEditTaxID">leadPlatform</label>
+                                                            <label class="form-label" for="modalEditTaxID">Lead Platform</label>
                                                             <input type="text" id="modalEditTaxID" name="leadPlatform" onChange={(e) => setLeadPlatform(e.target.value)}
                                                                 defaultValue={leadPlatform} class="form-control modal-edit-tax-id" placeholder="Call" />
                                                         </div>
 
                                                         <div class="col-12 col-md-6">
-                                                            <label class="form-label" for="modalEditTaxID">remark</label>
+                                                            <label class="form-label" for="modalEditTaxID">Remark</label>
                                                             <input type="text" id="modalEditTaxID" name="remark" onChange={(e) => setRemark(e.target.value)}
                                                                 defaultValue={remark} class="form-control modal-edit-tax-id" placeholder="remark" />
                                                         </div>
@@ -1413,13 +1476,8 @@ function SaleTeamUse() {
 
                                                         <div class="col-12 text-center ">
                                                             <div className='d-flex'>
-
                                                                 <button type="submit" class="btn btn-primary me-sm-3 me-1">Update</button>
-
-
                                                                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-
-
                                                             </div>
 
                                                         </div>
@@ -1432,12 +1490,7 @@ function SaleTeamUse() {
                                 </div >
 
                                 {/* Edit User to Assign Modal */}
-                                <div
-                                    className="modal fade modal_addsalteam"
-                                    id="AssignUsers"
-                                    tabIndex="-1"
-                                    aria-hidden="true"
-                                >
+                                <div className="modal fade modal_addsalteam" id="AssignUsers" tabIndex="-1" aria-hidden="true">
                                     <div className="modal-dialog modal-lg modal-simple modal-edit-user">
                                         <div className="modal-content">
                                             <div className="modal-header update_info">
@@ -1516,11 +1569,9 @@ function SaleTeamUse() {
                                     </div>
                                 </div>
                             </div >
-                            {/*  <!-- Footer --> */}
-
+                            {/*<!-- Footer --> */}
                             < Footer />
-
-                            {/*      <!-- / Footer --> */}
+                            {/*<!-- / Footer --> */}
 
                         </div >
                     </div >
